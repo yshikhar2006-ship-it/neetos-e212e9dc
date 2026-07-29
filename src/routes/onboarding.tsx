@@ -73,8 +73,9 @@ function Onboarding() {
         .from("profiles")
         .update({
           full_name: form.full_name || null,
-          class_level: form.class_level,
-          target_exam_date: form.target_exam_date,
+          attempt_type: form.class_level as "class_11" | "class_12" | "dropper" | "repeater",
+          exam_date: form.target_exam_date,
+          target_exam_year: Number(form.target_exam_date.slice(0, 4)),
           target_score: form.target_score,
           target_college: form.target_college || null,
           daily_study_hours: form.daily_hours,
@@ -83,6 +84,7 @@ function Onboarding() {
           strong_subjects: form.strong_subjects,
           study_style: form.study_style,
           onboarding_completed: true,
+
         })
         .eq("id", user.id);
       if (error) throw error;
