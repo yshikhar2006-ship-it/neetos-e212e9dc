@@ -92,20 +92,27 @@ function Dashboard() {
           </div>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {subjects.map((s) => {
-              const rows = progress.filter((p) => p.subject_id === s.id);
+              const subjectTopicIds = new Set(
+                topicMap.filter((t) => t.subject_id === s.id).map((t) => t.id),
+              );
+              const rows = progress.filter((p) => subjectTopicIds.has(p.topic_id));
               const done = rows.filter((p) =>
                 ["completed", "revised", "mastered"].includes(p.status),
               ).length;
               return (
                 <div key={s.id} className="flex flex-col items-center gap-3 rounded-lg border border-border p-4">
-                  <ProgressRing value={pct(done, Math.max(rows.length, 1))} accent={subjectToken(s.slug)} />
+                  <ProgressRing
+                    value={pct(done, Math.max(subjectTopicIds.size, 1))}
+                    tone={subjectToken(s.slug)}
+                  />
                   <SubjectBadge slug={s.slug} />
                   <span className="num text-caption text-muted-foreground">
-                    {done}/{rows.length || 0} topics
+                    {done}/{subjectTopicIds.size} topics
                   </span>
                 </div>
               );
             })}
+
             {subjects.length === 0 ? (
               <p className="text-caption text-muted-foreground">Loading your syllabus…</p>
             ) : null}
