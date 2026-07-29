@@ -565,52 +565,73 @@ export type Database = {
           attempt_type: Database["public"]["Enums"]["attempt_type"] | null
           avatar_url: string | null
           category: string | null
+          coaching_enrolled: boolean
           coaching_institute: string | null
           created_at: string
+          daily_study_hours: number
           exam_date: string | null
           full_name: string | null
           id: string
           is_admin: boolean
           onboarding_completed: boolean
           quota: string | null
+          strong_subjects: string[]
+          study_style: string
           subscription_tier: Database["public"]["Enums"]["subscription_tier"]
+          target_college: string | null
           target_exam_year: number
+          target_score: number
           theme: string
           updated_at: string
+          weak_subjects: string[]
         }
         Insert: {
           attempt_type?: Database["public"]["Enums"]["attempt_type"] | null
           avatar_url?: string | null
           category?: string | null
+          coaching_enrolled?: boolean
           coaching_institute?: string | null
           created_at?: string
+          daily_study_hours?: number
           exam_date?: string | null
           full_name?: string | null
           id: string
           is_admin?: boolean
           onboarding_completed?: boolean
           quota?: string | null
+          strong_subjects?: string[]
+          study_style?: string
           subscription_tier?: Database["public"]["Enums"]["subscription_tier"]
+          target_college?: string | null
           target_exam_year?: number
+          target_score?: number
           theme?: string
           updated_at?: string
+          weak_subjects?: string[]
         }
         Update: {
           attempt_type?: Database["public"]["Enums"]["attempt_type"] | null
           avatar_url?: string | null
           category?: string | null
+          coaching_enrolled?: boolean
           coaching_institute?: string | null
           created_at?: string
+          daily_study_hours?: number
           exam_date?: string | null
           full_name?: string | null
           id?: string
           is_admin?: boolean
           onboarding_completed?: boolean
           quota?: string | null
+          strong_subjects?: string[]
+          study_style?: string
           subscription_tier?: Database["public"]["Enums"]["subscription_tier"]
+          target_college?: string | null
           target_exam_year?: number
+          target_score?: number
           theme?: string
           updated_at?: string
+          weak_subjects?: string[]
         }
         Relationships: []
       }
