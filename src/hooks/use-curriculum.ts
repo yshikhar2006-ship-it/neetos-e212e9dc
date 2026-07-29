@@ -79,3 +79,26 @@ export function useTopics(chapterId?: string) {
     },
   });
 }
+
+export interface TopicSubjectRef {
+  id: string;
+  subject_id: string;
+}
+
+/** Flat topic -> subject map, used to roll progress rows up to subject level. */
+export function useTopicSubjectMap() {
+  return useQuery({
+    queryKey: ["topic-subject-map"],
+    staleTime: HOUR,
+    queryFn: async (): Promise<TopicSubjectRef[]> => {
+      const { data, error } = await supabase
+        .from("topics")
+        .select("id, chapters!inner(subject_id)");
+      if (error) throw error;
+      return (data ?? []).map((row) => ({
+        id: row.id as string,
+        subject_id: (row.chapters as unknown as { subject_id: string }).subject_id,
+      }));
+    },
+  });
+}

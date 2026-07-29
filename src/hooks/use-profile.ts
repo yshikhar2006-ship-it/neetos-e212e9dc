@@ -15,6 +15,13 @@ export interface Profile {
   subscription_tier: "free" | "premium" | "premium_plus";
   onboarding_completed: boolean;
   theme: string;
+  target_score: number;
+  target_college: string | null;
+  daily_study_hours: number;
+  coaching_enrolled: boolean;
+  weak_subjects: string[];
+  strong_subjects: string[];
+  study_style: string;
 }
 
 export function useProfile() {
