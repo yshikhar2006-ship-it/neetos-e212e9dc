@@ -15,7 +15,7 @@ import { PomodoroTimer } from "@/components/shared/pomodoro-timer";
 import { SubjectBadge } from "@/components/shared/subject-badge";
 import { Button } from "@/components/ui/button";
 import { useProfile } from "@/hooks/use-profile";
-import { useSubjects } from "@/hooks/use-curriculum";
+import { useSubjects, useTopicSubjectMap } from "@/hooks/use-curriculum";
 import { useTopicProgress } from "@/hooks/use-topic-progress";
 import { pct, subjectToken } from "@/lib/utils/format";
 
@@ -44,11 +44,12 @@ const QUICK_ACTIONS = [
 function Dashboard() {
   const { data: profile } = useProfile();
   const { data: subjects = [] } = useSubjects();
+  const { data: topicMap = [] } = useTopicSubjectMap();
   const { data: progress = [] } = useTopicProgress();
 
   const completed = progress.filter((p) => ["completed", "revised", "mastered"].includes(p.status)).length;
   const inProgress = progress.filter((p) => p.status === "in_progress").length;
-  const coverage = pct(completed, Math.max(progress.length, 1));
+  const coverage = pct(completed, Math.max(topicMap.length, 1));
   const firstName = profile?.full_name?.split(" ")[0];
 
   return (
