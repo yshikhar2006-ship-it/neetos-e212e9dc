@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import type { ReactElement, SVGProps } from "react";
 import { cn } from "@/lib/utils";
 import { subjectToken, type SubjectSlug } from "@/lib/utils/format";
 
@@ -60,7 +60,7 @@ export function ZoologyMark(props: MarkProps) {
   );
 }
 
-const MARKS: Record<SubjectSlug, (p: MarkProps) => JSX.Element> = {
+const MARKS: Record<SubjectSlug, (p: MarkProps) => ReactElement> = {
   physics: PhysicsMark,
   chemistry: ChemistryMark,
   botany: BotanyMark,
