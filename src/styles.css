@@ -239,3 +239,142 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * Global premium polish (Section 7). Defined once, applied through shared
+ * components — never per screen. Every motion here collapses under
+ * prefers-reduced-motion via the block at the end of this file.
+ * ------------------------------------------------------------------------ */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes route-in {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-pulse {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.14); }
+  100% { transform: scale(1); }
+}
+
+@keyframes draw-check {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes first-paint {
+  from { opacity: 0; transform: scale(0.995); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* 7.1 — route transitions: incoming view slides 8px in over 180ms. */
+@utility route-transition {
+  animation: route-in 180ms ease-out both;
+}
+
+/* 2 — dashboard cards rise in with a slight stagger. */
+@utility rise-in {
+  animation: rise-in 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility pulse-once {
+  animation: scale-pulse 420ms ease-out both;
+}
+
+/* 7.8 — deliberate first paint of the app shell. */
+@utility first-paint {
+  animation: first-paint 560ms ease-out both;
+}
+
+/* 7.2 — primary buttons lighten by 6% and gain a 1px inset top highlight. */
+@utility btn-premium {
+  position: relative;
+  transition:
+    background-color 150ms ease-out,
+    box-shadow 150ms ease-out,
+    transform 120ms ease-out;
+  box-shadow: inset 0 1px 0 0 oklch(1 0 0 / 0.16), var(--shadow-resting);
+  &:hover {
+    background-color: color-mix(in oklab, var(--color-primary) 94%, white 6%);
+    box-shadow: inset 0 1px 0 0 oklch(1 0 0 / 0.24), var(--shadow-raised);
+  }
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* 7.3 — data-bearing cards reveal one extra layer of precision on hover. */
+@utility precision-card {
+  transition:
+    box-shadow 180ms ease-out,
+    transform 180ms ease-out;
+  &:hover {
+    box-shadow: var(--shadow-raised);
+    transform: translateY(-2px);
+  }
+  & .precision-detail {
+    opacity: 0;
+    transition: opacity 150ms ease-out;
+  }
+  &:hover .precision-detail,
+  &:focus-within .precision-detail {
+    opacity: 1;
+  }
+  & .precision-rounded {
+    transition: opacity 150ms ease-out;
+  }
+  &:hover .precision-rounded,
+  &:focus-within .precision-rounded {
+    opacity: 0;
+  }
+}
+
+/* 2 — the hero pair is the only accent glow in the product. */
+@utility focus-glow {
+  border-color: color-mix(in oklab, var(--color-primary) 45%, transparent);
+  background-image: radial-gradient(
+    120% 120% at 85% 0%,
+    color-mix(in oklab, var(--color-primary) 22%, transparent) 0%,
+    transparent 60%
+  );
+  box-shadow: 0 0 40px -18px var(--color-primary);
+}
+
+/* 7.6 — light mode gets a lower-intensity glow, not an inverted dark one. */
+.light .focus-glow {
+  background-image: radial-gradient(
+    120% 120% at 85% 0%,
+    color-mix(in oklab, var(--color-primary) 9%, transparent) 0%,
+    transparent 62%
+  );
+  box-shadow: 0 8px 28px -22px var(--color-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise-in,
+  .route-transition,
+  .pulse-once,
+  .first-paint,
+  .btn-premium,
+  .precision-card {
+    animation: none !important;
+    transform: none !important;
+  }
+}
