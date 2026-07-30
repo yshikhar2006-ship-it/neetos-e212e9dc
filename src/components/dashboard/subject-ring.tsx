@@ -78,7 +78,7 @@ export function SubjectRing({
         </span>
       </div>
       <span className="flex items-center gap-1.5 text-caption font-medium">
-        <SubjectIcon slug={slug} className="size-4" style={{ color: `var(--color-${tone})` }} />
+        <SubjectIcon slug={slug} className="size-4" />
         {name}
       </span>
       <span className={cn("num text-caption text-muted-foreground")}>

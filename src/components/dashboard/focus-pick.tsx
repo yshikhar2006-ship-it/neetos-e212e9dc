@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { usePriorityScores, useRecomputePriority } from "@/hooks/use-priority";
 import { useSubjects } from "@/hooks/use-curriculum";
-import { subjectToken } from "@/lib/utils/format";
 import { SubjectIcon } from "@/components/shared/subject-icons";
 
 /**
@@ -34,7 +33,6 @@ export function FocusPick({ className }: { className?: string }) {
   }, [isLoading, scores.length, recompute]);
 
   const subject = subjects.find((s) => s.id === top?.topics?.chapters.subject_id);
-  const tone = subjectToken(subject?.slug);
 
   return (
     <section
