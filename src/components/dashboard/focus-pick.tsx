@@ -75,7 +75,7 @@ export function FocusPick({ className }: { className?: string }) {
         >
           <div>
             <div className="flex items-center gap-2 text-caption text-muted-foreground">
-              <SubjectIcon slug={subject?.slug} className={cn("size-4", `text-${tone}`)} />
+              <SubjectIcon slug={subject?.slug} className="size-4" />
               {subject?.name ?? "Syllabus"} · {top.topics?.chapters.name}
             </div>
             <p className="mt-1 font-display text-subheading font-bold">{top.topics?.name}</p>

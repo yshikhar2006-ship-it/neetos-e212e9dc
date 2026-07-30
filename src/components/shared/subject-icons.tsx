@@ -1,4 +1,4 @@
-import type { ReactElement, SVGProps } from "react";
+import type { CSSProperties, ReactElement, SVGProps } from "react";
 import { cn } from "@/lib/utils";
 import { subjectToken, type SubjectSlug } from "@/lib/utils/format";
 
@@ -67,8 +67,24 @@ const MARKS: Record<SubjectSlug, (p: MarkProps) => ReactElement> = {
   zoology: ZoologyMark,
 };
 
-export function SubjectIcon({ slug, className }: { slug?: string | null; className?: string }) {
+export function SubjectIcon({
+  slug,
+  className,
+  tinted = true,
+  style,
+}: {
+  slug?: string | null;
+  className?: string;
+  /** Colour the mark with the subject token (default) or inherit currentColor. */
+  tinted?: boolean;
+  style?: CSSProperties;
+}) {
   const token = subjectToken(slug);
   const Mark = MARKS[token];
-  return <Mark className={cn("size-5", className)} />;
+  return (
+    <Mark
+      className={cn("size-5", className)}
+      style={{ ...(tinted ? { color: `var(--color-${token})` } : null), ...style }}
+    />
+  );
 }
