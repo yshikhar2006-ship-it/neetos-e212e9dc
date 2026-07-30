@@ -449,6 +449,41 @@ export type Database = {
         }
         Relationships: []
       }
+      ncert_sections: {
+        Row: {
+          created_at: string
+          id: string
+          ncert_class: number
+          order_index: number
+          page_or_section_label: string
+          topic_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ncert_class: number
+          order_index?: number
+          page_or_section_label: string
+          topic_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ncert_class?: number
+          order_index?: number
+          page_or_section_label?: string
+          topic_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ncert_sections_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notes: {
         Row: {
           content: Json
@@ -559,6 +594,53 @@ export type Database = {
           student_user_id?: string
         }
         Relationships: []
+      }
+      priority_scores: {
+        Row: {
+          computed_at: string
+          driver: string
+          id: string
+          mastery: number
+          reason: string | null
+          recency_multiplier: number
+          score: number
+          topic_id: string
+          user_id: string
+          weightage: number
+        }
+        Insert: {
+          computed_at?: string
+          driver?: string
+          id?: string
+          mastery?: number
+          reason?: string | null
+          recency_multiplier?: number
+          score?: number
+          topic_id: string
+          user_id: string
+          weightage?: number
+        }
+        Update: {
+          computed_at?: string
+          driver?: string
+          id?: string
+          mastery?: number
+          reason?: string | null
+          recency_multiplier?: number
+          score?: number
+          topic_id?: string
+          user_id?: string
+          weightage?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "priority_scores_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "topics"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -1192,6 +1274,44 @@ export type Database = {
             columns: ["achievement_id"]
             isOneToOne: false
             referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_ncert_progress: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          ncert_section_id: string
+          read_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          ncert_section_id: string
+          read_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          ncert_section_id?: string
+          read_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_ncert_progress_ncert_section_id_fkey"
+            columns: ["ncert_section_id"]
+            isOneToOne: false
+            referencedRelation: "ncert_sections"
             referencedColumns: ["id"]
           },
         ]
