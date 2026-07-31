@@ -95,21 +95,20 @@ export function useReviewFlashcard() {
     mutationFn: async ({ card, rating }: { card: Flashcard; rating: number }) => {
       const next = sm2(
         {
-          easeFactor: Number(card.ease_factor),
-          intervalDays: Number(card.interval_days),
+          ease_factor: Number(card.ease_factor),
+          interval_days: Number(card.interval_days),
           repetitions: Number(card.repetitions),
         },
         rating,
       );
-      const nextReview = new Date(Date.now() + next.intervalDays * 86400000).toISOString();
 
       const { error: cardError } = await supabase
         .from("flashcards")
         .update({
-          ease_factor: next.easeFactor,
-          interval_days: next.intervalDays,
+          ease_factor: next.ease_factor,
+          interval_days: next.interval_days,
           repetitions: next.repetitions,
-          next_review_at: nextReview,
+          next_review_at: next.next_review_at,
         })
         .eq("id", card.id);
       if (cardError) throw cardError;
@@ -118,9 +117,9 @@ export function useReviewFlashcard() {
         user_id: user!.id,
         flashcard_id: card.id,
         rating,
-        ease_factor: next.easeFactor,
-        interval_days: next.intervalDays,
-        next_review_at: nextReview,
+        ease_factor: next.ease_factor,
+        interval_days: next.interval_days,
+        next_review_at: next.next_review_at,
       });
       if (reviewError) throw reviewError;
       return next;
