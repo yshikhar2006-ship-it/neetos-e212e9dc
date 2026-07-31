@@ -37,6 +37,7 @@ import { Route as AuthenticatedPracticeIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedRevisionFlashcardsRouteImport } from './routes/_authenticated/revision.flashcards'
 import { Route as AuthenticatedResourcesNotesRouteImport } from './routes/_authenticated/resources.notes'
 import { Route as AuthenticatedResourcesDoubtsRouteImport } from './routes/_authenticated/resources.doubts'
+import { Route as AuthenticatedPracticeResultsAttemptIdRouteImport } from './routes/_authenticated/practice.results.$attemptId'
 import { Route as AuthenticatedPracticeLiveAttemptIdRouteImport } from './routes/_authenticated/practice.live.$attemptId'
 
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -183,6 +184,12 @@ const AuthenticatedResourcesDoubtsRoute =
     path: '/doubts',
     getParentRoute: () => AuthenticatedResourcesRoute,
   } as any)
+const AuthenticatedPracticeResultsAttemptIdRoute =
+  AuthenticatedPracticeResultsAttemptIdRouteImport.update({
+    id: '/results/$attemptId',
+    path: '/results/$attemptId',
+    getParentRoute: () => AuthenticatedPracticeRoute,
+  } as any)
 const AuthenticatedPracticeLiveAttemptIdRoute =
   AuthenticatedPracticeLiveAttemptIdRouteImport.update({
     id: '/live/$attemptId',
@@ -219,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
   '/practice/': typeof AuthenticatedPracticeIndexRoute
   '/practice/live/$attemptId': typeof AuthenticatedPracticeLiveAttemptIdRoute
+  '/practice/results/$attemptId': typeof AuthenticatedPracticeResultsAttemptIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -248,6 +256,7 @@ export interface FileRoutesByTo {
   '/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
   '/practice': typeof AuthenticatedPracticeIndexRoute
   '/practice/live/$attemptId': typeof AuthenticatedPracticeLiveAttemptIdRoute
+  '/practice/results/$attemptId': typeof AuthenticatedPracticeResultsAttemptIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -280,6 +289,7 @@ export interface FileRoutesById {
   '/_authenticated/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
   '/_authenticated/practice/': typeof AuthenticatedPracticeIndexRoute
   '/_authenticated/practice/live/$attemptId': typeof AuthenticatedPracticeLiveAttemptIdRoute
+  '/_authenticated/practice/results/$attemptId': typeof AuthenticatedPracticeResultsAttemptIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -312,6 +322,7 @@ export interface FileRouteTypes {
     | '/revision/flashcards'
     | '/practice/'
     | '/practice/live/$attemptId'
+    | '/practice/results/$attemptId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -341,6 +352,7 @@ export interface FileRouteTypes {
     | '/revision/flashcards'
     | '/practice'
     | '/practice/live/$attemptId'
+    | '/practice/results/$attemptId'
   id:
     | '__root__'
     | '/'
@@ -372,6 +384,7 @@ export interface FileRouteTypes {
     | '/_authenticated/revision/flashcards'
     | '/_authenticated/practice/'
     | '/_authenticated/practice/live/$attemptId'
+    | '/_authenticated/practice/results/$attemptId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -579,6 +592,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedResourcesDoubtsRouteImport
       parentRoute: typeof AuthenticatedResourcesRoute
     }
+    '/_authenticated/practice/results/$attemptId': {
+      id: '/_authenticated/practice/results/$attemptId'
+      path: '/results/$attemptId'
+      fullPath: '/practice/results/$attemptId'
+      preLoaderRoute: typeof AuthenticatedPracticeResultsAttemptIdRouteImport
+      parentRoute: typeof AuthenticatedPracticeRoute
+    }
     '/_authenticated/practice/live/$attemptId': {
       id: '/_authenticated/practice/live/$attemptId'
       path: '/live/$attemptId'
@@ -592,12 +612,15 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedPracticeRouteChildren {
   AuthenticatedPracticeIndexRoute: typeof AuthenticatedPracticeIndexRoute
   AuthenticatedPracticeLiveAttemptIdRoute: typeof AuthenticatedPracticeLiveAttemptIdRoute
+  AuthenticatedPracticeResultsAttemptIdRoute: typeof AuthenticatedPracticeResultsAttemptIdRoute
 }
 
 const AuthenticatedPracticeRouteChildren: AuthenticatedPracticeRouteChildren = {
   AuthenticatedPracticeIndexRoute: AuthenticatedPracticeIndexRoute,
   AuthenticatedPracticeLiveAttemptIdRoute:
     AuthenticatedPracticeLiveAttemptIdRoute,
+  AuthenticatedPracticeResultsAttemptIdRoute:
+    AuthenticatedPracticeResultsAttemptIdRoute,
 }
 
 const AuthenticatedPracticeRouteWithChildren =
