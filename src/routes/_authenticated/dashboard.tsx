@@ -76,7 +76,7 @@ function Dashboard() {
             category={profile?.category}
             quota={profile?.quota}
             syllabusPct={coverage}
-            startDate={profile?.created_at}
+            startDate={profile?.exam_date ? null : null}
           />
         </WidgetBoundary>
 
