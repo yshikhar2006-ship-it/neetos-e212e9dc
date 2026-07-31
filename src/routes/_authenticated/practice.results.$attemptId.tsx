@@ -60,9 +60,9 @@ function ResultsPage() {
 
   const rank = estimateRank(Math.round((a.score / Math.max(a.max_score, 1)) * 720));
   const donut = [
-    { label: "Correct", value: a.correct_count, tone: "success" },
-    { label: "Incorrect", value: a.incorrect_count, tone: "destructive" },
-    { label: "Skipped", value: a.unattempted_count, tone: "muted-foreground" },
+    { name: "Correct", value: a.correct_count, tone: "success" },
+    { name: "Incorrect", value: a.incorrect_count, tone: "destructive" },
+    { name: "Skipped", value: a.unattempted_count, tone: "muted-foreground" },
   ];
 
   return (
