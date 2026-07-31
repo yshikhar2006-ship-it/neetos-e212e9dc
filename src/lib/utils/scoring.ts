@@ -12,7 +12,7 @@ export interface ScoredAnswer {
   correct_option: number;
 }
 
-export function scoreAttempt(answers: ScoredAnswer[], totalQuestions = NTA.TOTAL_QUESTIONS) {
+export function scoreAttempt(answers: ScoredAnswer[], totalQuestions: number = NTA.TOTAL_QUESTIONS) {
   let correct = 0;
   let incorrect = 0;
   for (const a of answers) {
@@ -32,7 +32,7 @@ export function scoreAttempt(answers: ScoredAnswer[], totalQuestions = NTA.TOTAL
 }
 
 /** Rough percentile/rank estimate from a 720-scale score. Always shown as an estimate. */
-export function estimateRank(score: number, totalCandidates = 2400000) {
+export function estimateRank(score: number, totalCandidates: number = 2400000) {
   const ratio = Math.min(1, Math.max(0, score / NTA.MAX_SCORE));
   const percentile = Number((100 * Math.pow(ratio, 1.65)).toFixed(4));
   const rank = Math.max(1, Math.round(((100 - percentile) / 100) * totalCandidates));

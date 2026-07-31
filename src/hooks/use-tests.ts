@@ -60,7 +60,7 @@ export function useStartTest() {
           total_questions: shuffled.length,
           duration_minutes: config.durationMinutes,
           is_public: false,
-          config: config as unknown as Record<string, unknown>,
+          config: JSON.parse(JSON.stringify(config)),
         })
         .select()
         .single();
@@ -184,9 +184,9 @@ export function useSubmitAttempt() {
       const scored: ScoredAnswer[] = questions.map((q) => {
         const a = answers[q.question_id];
         return {
-          selected: a?.selected ?? null,
-          correct: q.correct_option,
-        } as ScoredAnswer;
+          selected_option: a?.selected ?? null,
+          correct_option: q.correct_option,
+        };
       });
       const result = scoreAttempt(scored, questions.length);
 
@@ -211,9 +211,9 @@ export function useSubmitAttempt() {
           submitted_at: new Date().toISOString(),
           score: result.score,
           max_score: questions.length * NTA.CORRECT,
-          correct_count: result.correct,
-          incorrect_count: result.incorrect,
-          unattempted_count: result.unattempted,
+          correct_count: result.correct_count,
+          incorrect_count: result.incorrect_count,
+          unattempted_count: result.unattempted_count,
           accuracy: result.accuracy,
           time_taken_seconds: timeTakenSeconds,
           subject_breakdown: breakdown,
