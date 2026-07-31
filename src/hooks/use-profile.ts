@@ -22,6 +22,7 @@ export interface Profile {
   weak_subjects: string[];
   strong_subjects: string[];
   study_style: string;
+  created_at?: string;
 }
 
 export function useProfile() {

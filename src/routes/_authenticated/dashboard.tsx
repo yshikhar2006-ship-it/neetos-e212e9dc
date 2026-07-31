@@ -1,23 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  BrainCircuit,
-  CalendarDays,
-  ClipboardList,
-  Flame,
-  NotebookPen,
-  Target,
-  TrendingUp,
-} from "lucide-react";
+import { BrainCircuit, CalendarDays, ClipboardList, NotebookPen } from "lucide-react";
 import { PageHeader } from "@/components/shared/app-shell";
-import { StatCard, ProgressRing } from "@/components/shared/stat-card";
-import { CountdownWidget } from "@/components/shared/countdown-widget";
 import { PomodoroTimer } from "@/components/shared/pomodoro-timer";
-import { SubjectBadge } from "@/components/shared/subject-badge";
 import { Button } from "@/components/ui/button";
+import { WidgetBoundary } from "@/components/dashboard/widget-boundary";
+import { CountdownCard } from "@/components/dashboard/countdown-card";
+import { GoalCard } from "@/components/dashboard/goal-card";
+import { FocusPick } from "@/components/dashboard/focus-pick";
+import { SubjectRing } from "@/components/dashboard/subject-ring";
+import { StreakPill, ProductivityBadge } from "@/components/dashboard/streak-and-score";
+import { TodayTasks } from "@/components/dashboard/today-tasks";
+import { ConsistencyWidget, MiniCalendar, WeeklyHours } from "@/components/dashboard/analytics-widgets";
 import { useProfile } from "@/hooks/use-profile";
 import { useSubjects, useTopicSubjectMap } from "@/hooks/use-curriculum";
 import { useTopicProgress } from "@/hooks/use-topic-progress";
-import { pct, subjectToken } from "@/lib/utils/format";
+import { useUpsertHabitLog } from "@/hooks/use-habits";
+import { pct, todayISO } from "@/lib/utils/format";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -46,9 +44,10 @@ function Dashboard() {
   const { data: subjects = [] } = useSubjects();
   const { data: topicMap = [] } = useTopicSubjectMap();
   const { data: progress = [] } = useTopicProgress();
+  const upsertHabit = useUpsertHabitLog();
 
-  const completed = progress.filter((p) => ["completed", "revised", "mastered"].includes(p.status)).length;
-  const inProgress = progress.filter((p) => p.status === "in_progress").length;
+  const doneStatuses = ["completed", "revised", "mastered"];
+  const completed = progress.filter((p) => doneStatuses.includes(p.status)).length;
   const coverage = pct(completed, Math.max(topicMap.length, 1));
   const firstName = profile?.full_name?.split(" ")[0];
 
@@ -58,75 +57,99 @@ function Dashboard() {
         title={firstName ? `Good to see you, ${firstName}` : "Your dashboard"}
         description="Plan → Study → Practice → Analyze → Revise. Start with whatever is closest to due."
         actions={
-          <Button asChild>
-            <Link to="/today">Today's tasks</Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <StreakPill />
+            <ProductivityBadge />
+            <Button asChild>
+              <Link to="/today">Today's tasks</Link>
+            </Button>
+          </div>
         }
       />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-        <div className="lg:col-span-4">
-          <CountdownWidget examDate={profile?.exam_date} />
-        </div>
-        <StatCard
-          className="lg:col-span-4"
-          label="Syllabus covered"
-          value={`${coverage}%`}
-          icon={TrendingUp}
-          hint={`${completed} topics done · ${inProgress} in progress`}
-        />
-        <StatCard
-          className="lg:col-span-4"
-          label="Target score"
-          value={profile?.target_score ?? 650}
-          suffix="/ 720"
-          icon={Target}
-          hint={profile?.target_college ? `Goal: ${profile.target_college}` : "Set a dream college in Goals"}
-        />
+        <WidgetBoundary label="Countdown" className="rise-in lg:col-span-5">
+          <CountdownCard
+            className="h-full"
+            examDate={profile?.exam_date}
+            examYear={profile?.target_exam_year}
+            category={profile?.category}
+            quota={profile?.quota}
+            syllabusPct={coverage}
+            startDate={profile?.created_at}
+          />
+        </WidgetBoundary>
 
-        <section className="surface p-5 lg:col-span-8">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-subheading font-semibold">Subject coverage</h2>
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/syllabus">Open syllabus</Link>
-            </Button>
-          </div>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {subjects.map((s) => {
-              const subjectTopicIds = new Set(
-                topicMap.filter((t) => t.subject_id === s.id).map((t) => t.id),
-              );
-              const rows = progress.filter((p) => subjectTopicIds.has(p.topic_id));
-              const done = rows.filter((p) =>
-                ["completed", "revised", "mastered"].includes(p.status),
-              ).length;
-              return (
-                <div key={s.id} className="flex flex-col items-center gap-3 rounded-lg border border-border p-4">
-                  <ProgressRing
-                    value={pct(done, Math.max(subjectTopicIds.size, 1))}
-                    tone={subjectToken(s.slug)}
+        <WidgetBoundary label="Focus pick" className="rise-in lg:col-span-4">
+          <FocusPick className="h-full" />
+        </WidgetBoundary>
+
+        <WidgetBoundary label="Goal" className="rise-in lg:col-span-3">
+          <GoalCard className="h-full" />
+        </WidgetBoundary>
+
+        <WidgetBoundary label="Subject coverage" className="rise-in lg:col-span-8">
+          <section className="surface h-full p-5" aria-label="Subject coverage">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-subheading font-semibold">Subject coverage</h2>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/syllabus">Open syllabus</Link>
+              </Button>
+            </div>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {subjects.map((s) => {
+                const ids = new Set(topicMap.filter((t) => t.subject_id === s.id).map((t) => t.id));
+                const done = progress.filter((p) => ids.has(p.topic_id) && doneStatuses.includes(p.status)).length;
+                return (
+                  <SubjectRing
+                    key={s.id}
+                    slug={s.slug}
+                    name={s.name}
+                    value={pct(done, Math.max(ids.size, 1))}
+                    done={done}
+                    total={ids.size}
                   />
-                  <SubjectBadge slug={s.slug} />
-                  <span className="num text-caption text-muted-foreground">
-                    {done}/{subjectTopicIds.size} topics
-                  </span>
-                </div>
-              );
-            })}
+                );
+              })}
+              {subjects.length === 0 ? (
+                <p className="text-caption text-muted-foreground">Loading your syllabus…</p>
+              ) : null}
+            </div>
+          </section>
+        </WidgetBoundary>
 
-            {subjects.length === 0 ? (
-              <p className="text-caption text-muted-foreground">Loading your syllabus…</p>
-            ) : null}
-          </div>
-        </section>
+        <WidgetBoundary label="Pomodoro" className="rise-in lg:col-span-4">
+          <PomodoroTimer
+            className="h-full"
+            onSessionComplete={(minutes) =>
+              upsertHabit.mutate({
+                log_date: todayISO(),
+                study_hours: Number((minutes / 60).toFixed(2)),
+                pomodoro_count: 1,
+              })
+            }
+          />
+        </WidgetBoundary>
 
-        <div className="lg:col-span-4">
-          <PomodoroTimer />
-        </div>
+        <WidgetBoundary label="Today's tasks" className="rise-in lg:col-span-5">
+          <TodayTasks className="h-full" />
+        </WidgetBoundary>
 
-        <section className="surface p-5 lg:col-span-6">
+        <WidgetBoundary label="Weekly hours" className="rise-in lg:col-span-7">
+          <WeeklyHours className="h-full" />
+        </WidgetBoundary>
+
+        <WidgetBoundary label="This week" className="rise-in lg:col-span-7">
+          <MiniCalendar className="h-full" />
+        </WidgetBoundary>
+
+        <WidgetBoundary label="Consistency" className="rise-in lg:col-span-5">
+          <ConsistencyWidget className="h-full" />
+        </WidgetBoundary>
+
+        <section className="surface p-5 lg:col-span-12">
           <h2 className="text-subheading font-semibold">Quick actions</h2>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
             {QUICK_ACTIONS.map((a) => (
               <Button key={a.to} variant="outline" className="justify-start" asChild>
                 <Link to={a.to}>
@@ -135,28 +158,6 @@ function Dashboard() {
               </Button>
             ))}
           </div>
-        </section>
-
-        <section className="surface p-5 lg:col-span-6">
-          <h2 className="flex items-center gap-2 text-subheading font-semibold">
-            <Flame className="size-4 text-warning" aria-hidden /> Keep the loop going
-          </h2>
-          <ul className="mt-4 space-y-3 text-caption text-muted-foreground">
-            <li>
-              Log every mock in <Link to="/practice" className="text-primary underline-offset-2 hover:underline">Practice</Link>{" "}
-              so your analytics stay honest.
-            </li>
-            <li>
-              Wrong answers land in the{" "}
-              <Link to="/error-log" className="text-primary underline-offset-2 hover:underline">Error Log</Link>{" "}
-              automatically, tagged by mistake type.
-            </li>
-            <li>
-              Completed topics feed the{" "}
-              <Link to="/revision" className="text-primary underline-offset-2 hover:underline">Revision Hub</Link>{" "}
-              queue on an SM-2 schedule.
-            </li>
-          </ul>
         </section>
       </div>
     </>
