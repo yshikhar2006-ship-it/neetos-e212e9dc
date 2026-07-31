@@ -37,6 +37,7 @@ import { Route as AuthenticatedPracticeIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedRevisionFlashcardsRouteImport } from './routes/_authenticated/revision.flashcards'
 import { Route as AuthenticatedResourcesNotesRouteImport } from './routes/_authenticated/resources.notes'
 import { Route as AuthenticatedResourcesDoubtsRouteImport } from './routes/_authenticated/resources.doubts'
+import { Route as AuthenticatedPracticeLiveAttemptIdRouteImport } from './routes/_authenticated/practice.live.$attemptId'
 
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
@@ -182,6 +183,12 @@ const AuthenticatedResourcesDoubtsRoute =
     path: '/doubts',
     getParentRoute: () => AuthenticatedResourcesRoute,
   } as any)
+const AuthenticatedPracticeLiveAttemptIdRoute =
+  AuthenticatedPracticeLiveAttemptIdRouteImport.update({
+    id: '/live/$attemptId',
+    path: '/live/$attemptId',
+    getParentRoute: () => AuthenticatedPracticeRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -211,6 +218,7 @@ export interface FileRoutesByFullPath {
   '/resources/notes': typeof AuthenticatedResourcesNotesRoute
   '/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
   '/practice/': typeof AuthenticatedPracticeIndexRoute
+  '/practice/live/$attemptId': typeof AuthenticatedPracticeLiveAttemptIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -239,6 +247,7 @@ export interface FileRoutesByTo {
   '/resources/notes': typeof AuthenticatedResourcesNotesRoute
   '/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
   '/practice': typeof AuthenticatedPracticeIndexRoute
+  '/practice/live/$attemptId': typeof AuthenticatedPracticeLiveAttemptIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -270,6 +279,7 @@ export interface FileRoutesById {
   '/_authenticated/resources/notes': typeof AuthenticatedResourcesNotesRoute
   '/_authenticated/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
   '/_authenticated/practice/': typeof AuthenticatedPracticeIndexRoute
+  '/_authenticated/practice/live/$attemptId': typeof AuthenticatedPracticeLiveAttemptIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -301,6 +311,7 @@ export interface FileRouteTypes {
     | '/resources/notes'
     | '/revision/flashcards'
     | '/practice/'
+    | '/practice/live/$attemptId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -329,6 +340,7 @@ export interface FileRouteTypes {
     | '/resources/notes'
     | '/revision/flashcards'
     | '/practice'
+    | '/practice/live/$attemptId'
   id:
     | '__root__'
     | '/'
@@ -359,6 +371,7 @@ export interface FileRouteTypes {
     | '/_authenticated/resources/notes'
     | '/_authenticated/revision/flashcards'
     | '/_authenticated/practice/'
+    | '/_authenticated/practice/live/$attemptId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -566,15 +579,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedResourcesDoubtsRouteImport
       parentRoute: typeof AuthenticatedResourcesRoute
     }
+    '/_authenticated/practice/live/$attemptId': {
+      id: '/_authenticated/practice/live/$attemptId'
+      path: '/live/$attemptId'
+      fullPath: '/practice/live/$attemptId'
+      preLoaderRoute: typeof AuthenticatedPracticeLiveAttemptIdRouteImport
+      parentRoute: typeof AuthenticatedPracticeRoute
+    }
   }
 }
 
 interface AuthenticatedPracticeRouteChildren {
   AuthenticatedPracticeIndexRoute: typeof AuthenticatedPracticeIndexRoute
+  AuthenticatedPracticeLiveAttemptIdRoute: typeof AuthenticatedPracticeLiveAttemptIdRoute
 }
 
 const AuthenticatedPracticeRouteChildren: AuthenticatedPracticeRouteChildren = {
   AuthenticatedPracticeIndexRoute: AuthenticatedPracticeIndexRoute,
+  AuthenticatedPracticeLiveAttemptIdRoute:
+    AuthenticatedPracticeLiveAttemptIdRoute,
 }
 
 const AuthenticatedPracticeRouteWithChildren =
