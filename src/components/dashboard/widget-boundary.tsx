@@ -22,7 +22,7 @@ export class WidgetBoundary extends Component<
   render() {
     if (this.state.hasError) {
       return (
-        <section className={this.props.className} aria-label={this.props.label}>
+        <section className={cn("min-w-0", this.props.className)} aria-label={this.props.label}>
           <div className="surface flex h-full min-h-32 flex-col items-start justify-center gap-2 p-5">
             <AlertTriangle className="size-4 text-warning" strokeWidth={1.5} aria-hidden />
             <p className="text-caption text-muted-foreground">
@@ -39,6 +39,9 @@ export class WidgetBoundary extends Component<
         </section>
       );
     }
-    return <>{this.props.children}</>;
+    // The className carries the dashboard grid column span — it must always be
+    // applied, otherwise widgets collapse into single 1/12 columns.
+    return <div className={cn("min-w-0", this.props.className)}>{this.props.children}</div>;
   }
 }
+
