@@ -22,6 +22,7 @@ import {
   type MistakeType,
 } from "@/hooks/use-error-log";
 import { useCreateFlashcard } from "@/hooks/use-flashcards";
+import { useSubjects } from "@/hooks/use-curriculum";
 import { formatDate } from "@/lib/utils/format";
 
 export const Route = createFileRoute("/_authenticated/error-log")({
@@ -67,6 +68,7 @@ function ErrorLogPage() {
   const update = useUpdateErrorEntry();
   const remove = useDeleteErrorEntry();
   const createCard = useCreateFlashcard();
+  const { data: subjects = [] } = useSubjects();
 
   const [status, setStatus] = useState("open");
   const [type, setType] = useState("all");
@@ -83,6 +85,7 @@ function ErrorLogPage() {
     () => new Map((questions as unknown as QuestionRow[]).map((q) => [q.id, q])),
     [questions],
   );
+  const slugFor = (subjectId?: string | null) => subjects.find((s) => s.id === subjectId)?.slug;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -124,7 +127,7 @@ function ErrorLogPage() {
       header: "Subject",
       render: (r) => {
         const q = r.question_id ? questionById.get(r.question_id) : undefined;
-        return q?.subject_id ? <SubjectBadge slug={q.subject_id} size="sm" /> : <span className="text-muted-foreground">—</span>;
+        return q?.subject_id ? <SubjectBadge slug={slugFor(q.subject_id)} size="sm" /> : <span className="text-muted-foreground">—</span>;
       },
     },
     {
