@@ -1,5 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { AlertTriangle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 /**
  * Every dashboard widget fails independently (Section 2, States).
