@@ -1,27 +1,41 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader } from "@/components/shared/app-shell";
-import { EmptyState } from "@/components/shared/state";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/resources")({
-  head: () => ({
-    meta: [
-      { title: "Resources — NEET OS" },
-      { name: "description", content: "Notes, NCERT reference, bookmarks and doubts." },
-      { property: "og:title", content: "Resources — NEET OS" },
-      { property: "og:description", content: "Notes, NCERT reference, bookmarks and doubts." },
-    ],
-  }),
-  component: ResourcesPage,
+  component: ResourcesLayout,
 });
 
-function ResourcesPage() {
+const TABS = [
+  { to: "/resources", label: "Overview" },
+  { to: "/resources/notes", label: "Notes Vault" },
+  { to: "/resources/ncert", label: "NCERT Reader" },
+  { to: "/resources/doubts", label: "Doubt Journal" },
+];
+
+function ResourcesLayout() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
-    <>
-      <PageHeader title="Resources" description="Notes, NCERT reference, bookmarks and doubts." />
-      <EmptyState
-        title="Study resources is being built"
-        description="This screen arrives in an upcoming milestone. Your data is already being collected for it."
-      />
-    </>
+    <div className="space-y-5">
+      <nav aria-label="Resources sections" className="flex flex-wrap gap-2">
+        {TABS.map((tab) => {
+          const active = tab.to === "/resources" ? pathname === "/resources" : pathname.startsWith(tab.to);
+          return (
+            <Link
+              key={tab.to}
+              to={tab.to}
+              className={cn(
+                "rounded-full border px-3 py-1.5 text-caption font-medium transition-colors duration-150",
+                active
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-muted-foreground hover:bg-accent hover:text-foreground",
+              )}
+            >
+              {tab.label}
+            </Link>
+          );
+        })}
+      </nav>
+      <Outlet />
+    </div>
   );
 }
