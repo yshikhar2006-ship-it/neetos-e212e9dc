@@ -38,6 +38,7 @@ import { Route as AuthenticatedResourcesIndexRouteImport } from './routes/_authe
 import { Route as AuthenticatedPracticeIndexRouteImport } from './routes/_authenticated/practice.index'
 import { Route as AuthenticatedRevisionFlashcardsRouteImport } from './routes/_authenticated/revision.flashcards'
 import { Route as AuthenticatedResourcesNotesRouteImport } from './routes/_authenticated/resources.notes'
+import { Route as AuthenticatedResourcesNcertRouteImport } from './routes/_authenticated/resources.ncert'
 import { Route as AuthenticatedResourcesDoubtsRouteImport } from './routes/_authenticated/resources.doubts'
 import { Route as AuthenticatedPracticeResultsAttemptIdRouteImport } from './routes/_authenticated/practice.results.$attemptId'
 import { Route as AuthenticatedPracticeLiveAttemptIdRouteImport } from './routes/_authenticated/practice.live.$attemptId'
@@ -192,6 +193,12 @@ const AuthenticatedResourcesNotesRoute =
     path: '/notes',
     getParentRoute: () => AuthenticatedResourcesRoute,
   } as any)
+const AuthenticatedResourcesNcertRoute =
+  AuthenticatedResourcesNcertRouteImport.update({
+    id: '/ncert',
+    path: '/ncert',
+    getParentRoute: () => AuthenticatedResourcesRoute,
+  } as any)
 const AuthenticatedResourcesDoubtsRoute =
   AuthenticatedResourcesDoubtsRouteImport.update({
     id: '/doubts',
@@ -236,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/syllabus': typeof AuthenticatedSyllabusRoute
   '/today': typeof AuthenticatedTodayRoute
   '/resources/doubts': typeof AuthenticatedResourcesDoubtsRoute
+  '/resources/ncert': typeof AuthenticatedResourcesNcertRoute
   '/resources/notes': typeof AuthenticatedResourcesNotesRoute
   '/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
   '/practice/': typeof AuthenticatedPracticeIndexRoute
@@ -266,6 +274,7 @@ export interface FileRoutesByTo {
   '/syllabus': typeof AuthenticatedSyllabusRoute
   '/today': typeof AuthenticatedTodayRoute
   '/resources/doubts': typeof AuthenticatedResourcesDoubtsRoute
+  '/resources/ncert': typeof AuthenticatedResourcesNcertRoute
   '/resources/notes': typeof AuthenticatedResourcesNotesRoute
   '/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
   '/practice': typeof AuthenticatedPracticeIndexRoute
@@ -301,6 +310,7 @@ export interface FileRoutesById {
   '/_authenticated/syllabus': typeof AuthenticatedSyllabusRoute
   '/_authenticated/today': typeof AuthenticatedTodayRoute
   '/_authenticated/resources/doubts': typeof AuthenticatedResourcesDoubtsRoute
+  '/_authenticated/resources/ncert': typeof AuthenticatedResourcesNcertRoute
   '/_authenticated/resources/notes': typeof AuthenticatedResourcesNotesRoute
   '/_authenticated/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
   '/_authenticated/practice/': typeof AuthenticatedPracticeIndexRoute
@@ -336,6 +346,7 @@ export interface FileRouteTypes {
     | '/syllabus'
     | '/today'
     | '/resources/doubts'
+    | '/resources/ncert'
     | '/resources/notes'
     | '/revision/flashcards'
     | '/practice/'
@@ -366,6 +377,7 @@ export interface FileRouteTypes {
     | '/syllabus'
     | '/today'
     | '/resources/doubts'
+    | '/resources/ncert'
     | '/resources/notes'
     | '/revision/flashcards'
     | '/practice'
@@ -400,6 +412,7 @@ export interface FileRouteTypes {
     | '/_authenticated/syllabus'
     | '/_authenticated/today'
     | '/_authenticated/resources/doubts'
+    | '/_authenticated/resources/ncert'
     | '/_authenticated/resources/notes'
     | '/_authenticated/revision/flashcards'
     | '/_authenticated/practice/'
@@ -621,6 +634,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedResourcesNotesRouteImport
       parentRoute: typeof AuthenticatedResourcesRoute
     }
+    '/_authenticated/resources/ncert': {
+      id: '/_authenticated/resources/ncert'
+      path: '/ncert'
+      fullPath: '/resources/ncert'
+      preLoaderRoute: typeof AuthenticatedResourcesNcertRouteImport
+      parentRoute: typeof AuthenticatedResourcesRoute
+    }
     '/_authenticated/resources/doubts': {
       id: '/_authenticated/resources/doubts'
       path: '/doubts'
@@ -666,6 +686,7 @@ const AuthenticatedPracticeRouteWithChildren =
 
 interface AuthenticatedResourcesRouteChildren {
   AuthenticatedResourcesDoubtsRoute: typeof AuthenticatedResourcesDoubtsRoute
+  AuthenticatedResourcesNcertRoute: typeof AuthenticatedResourcesNcertRoute
   AuthenticatedResourcesNotesRoute: typeof AuthenticatedResourcesNotesRoute
   AuthenticatedResourcesIndexRoute: typeof AuthenticatedResourcesIndexRoute
 }
@@ -673,6 +694,7 @@ interface AuthenticatedResourcesRouteChildren {
 const AuthenticatedResourcesRouteChildren: AuthenticatedResourcesRouteChildren =
   {
     AuthenticatedResourcesDoubtsRoute: AuthenticatedResourcesDoubtsRoute,
+    AuthenticatedResourcesNcertRoute: AuthenticatedResourcesNcertRoute,
     AuthenticatedResourcesNotesRoute: AuthenticatedResourcesNotesRoute,
     AuthenticatedResourcesIndexRoute: AuthenticatedResourcesIndexRoute,
   }
