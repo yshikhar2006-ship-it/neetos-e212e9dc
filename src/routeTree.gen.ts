@@ -34,6 +34,7 @@ import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedAiCoachRouteImport } from './routes/_authenticated/ai-coach'
 import { Route as AuthenticatedRevisionIndexRouteImport } from './routes/_authenticated/revision.index'
+import { Route as AuthenticatedResourcesIndexRouteImport } from './routes/_authenticated/resources.index'
 import { Route as AuthenticatedPracticeIndexRouteImport } from './routes/_authenticated/practice.index'
 import { Route as AuthenticatedRevisionFlashcardsRouteImport } from './routes/_authenticated/revision.flashcards'
 import { Route as AuthenticatedResourcesNotesRouteImport } from './routes/_authenticated/resources.notes'
@@ -167,6 +168,12 @@ const AuthenticatedRevisionIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedRevisionRoute,
   } as any)
+const AuthenticatedResourcesIndexRoute =
+  AuthenticatedResourcesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedResourcesRoute,
+  } as any)
 const AuthenticatedPracticeIndexRoute =
   AuthenticatedPracticeIndexRouteImport.update({
     id: '/',
@@ -232,6 +239,7 @@ export interface FileRoutesByFullPath {
   '/resources/notes': typeof AuthenticatedResourcesNotesRoute
   '/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
   '/practice/': typeof AuthenticatedPracticeIndexRoute
+  '/resources/': typeof AuthenticatedResourcesIndexRoute
   '/revision/': typeof AuthenticatedRevisionIndexRoute
   '/practice/live/$attemptId': typeof AuthenticatedPracticeLiveAttemptIdRoute
   '/practice/results/$attemptId': typeof AuthenticatedPracticeResultsAttemptIdRoute
@@ -253,7 +261,6 @@ export interface FileRoutesByTo {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/planner': typeof AuthenticatedPlannerRoute
   '/profile': typeof AuthenticatedProfileRoute
-  '/resources': typeof AuthenticatedResourcesRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRoute
   '/study-rooms': typeof AuthenticatedStudyRoomsRoute
   '/syllabus': typeof AuthenticatedSyllabusRoute
@@ -262,6 +269,7 @@ export interface FileRoutesByTo {
   '/resources/notes': typeof AuthenticatedResourcesNotesRoute
   '/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
   '/practice': typeof AuthenticatedPracticeIndexRoute
+  '/resources': typeof AuthenticatedResourcesIndexRoute
   '/revision': typeof AuthenticatedRevisionIndexRoute
   '/practice/live/$attemptId': typeof AuthenticatedPracticeLiveAttemptIdRoute
   '/practice/results/$attemptId': typeof AuthenticatedPracticeResultsAttemptIdRoute
@@ -296,6 +304,7 @@ export interface FileRoutesById {
   '/_authenticated/resources/notes': typeof AuthenticatedResourcesNotesRoute
   '/_authenticated/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
   '/_authenticated/practice/': typeof AuthenticatedPracticeIndexRoute
+  '/_authenticated/resources/': typeof AuthenticatedResourcesIndexRoute
   '/_authenticated/revision/': typeof AuthenticatedRevisionIndexRoute
   '/_authenticated/practice/live/$attemptId': typeof AuthenticatedPracticeLiveAttemptIdRoute
   '/_authenticated/practice/results/$attemptId': typeof AuthenticatedPracticeResultsAttemptIdRoute
@@ -330,6 +339,7 @@ export interface FileRouteTypes {
     | '/resources/notes'
     | '/revision/flashcards'
     | '/practice/'
+    | '/resources/'
     | '/revision/'
     | '/practice/live/$attemptId'
     | '/practice/results/$attemptId'
@@ -351,7 +361,6 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/planner'
     | '/profile'
-    | '/resources'
     | '/settings'
     | '/study-rooms'
     | '/syllabus'
@@ -360,6 +369,7 @@ export interface FileRouteTypes {
     | '/resources/notes'
     | '/revision/flashcards'
     | '/practice'
+    | '/resources'
     | '/revision'
     | '/practice/live/$attemptId'
     | '/practice/results/$attemptId'
@@ -393,6 +403,7 @@ export interface FileRouteTypes {
     | '/_authenticated/resources/notes'
     | '/_authenticated/revision/flashcards'
     | '/_authenticated/practice/'
+    | '/_authenticated/resources/'
     | '/_authenticated/revision/'
     | '/_authenticated/practice/live/$attemptId'
     | '/_authenticated/practice/results/$attemptId'
@@ -582,6 +593,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRevisionIndexRouteImport
       parentRoute: typeof AuthenticatedRevisionRoute
     }
+    '/_authenticated/resources/': {
+      id: '/_authenticated/resources/'
+      path: '/'
+      fullPath: '/resources/'
+      preLoaderRoute: typeof AuthenticatedResourcesIndexRouteImport
+      parentRoute: typeof AuthenticatedResourcesRoute
+    }
     '/_authenticated/practice/': {
       id: '/_authenticated/practice/'
       path: '/'
@@ -649,12 +667,14 @@ const AuthenticatedPracticeRouteWithChildren =
 interface AuthenticatedResourcesRouteChildren {
   AuthenticatedResourcesDoubtsRoute: typeof AuthenticatedResourcesDoubtsRoute
   AuthenticatedResourcesNotesRoute: typeof AuthenticatedResourcesNotesRoute
+  AuthenticatedResourcesIndexRoute: typeof AuthenticatedResourcesIndexRoute
 }
 
 const AuthenticatedResourcesRouteChildren: AuthenticatedResourcesRouteChildren =
   {
     AuthenticatedResourcesDoubtsRoute: AuthenticatedResourcesDoubtsRoute,
     AuthenticatedResourcesNotesRoute: AuthenticatedResourcesNotesRoute,
+    AuthenticatedResourcesIndexRoute: AuthenticatedResourcesIndexRoute,
   }
 
 const AuthenticatedResourcesRouteWithChildren =
