@@ -192,16 +192,17 @@ function GoalsPage() {
   };
 
   const historyColumns: Column<RankPrediction>[] = [
-    { key: "created_at", header: "Date", cell: (r) => format(new Date(r.created_at), "d MMM yyyy") },
-    { key: "based_on_score", header: "Score", cell: (r) => `${r.based_on_score}/720` },
-    { key: "predicted_percentile", header: "Percentile", cell: (r) => `${Number(r.predicted_percentile).toFixed(3)}%` },
+    { key: "created_at", header: "Date", render: (r) => format(new Date(r.created_at), "d MMM yyyy") },
+    { key: "based_on_score", header: "Score", render: (r) => `${r.based_on_score}/720` },
+    { key: "predicted_percentile", header: "Percentile", render: (r) => `${Number(r.predicted_percentile).toFixed(3)}%` },
     {
       key: "rank",
       header: "Rank band",
-      cell: (r) => `${r.rank_low.toLocaleString("en-IN")} – ${r.rank_high.toLocaleString("en-IN")}`,
+      render: (r) => `${r.rank_low.toLocaleString("en-IN")} – ${r.rank_high.toLocaleString("en-IN")}`,
     },
-    { key: "narrative", header: "Note", cell: (r) => r.narrative ?? "—" },
+    { key: "narrative", header: "Note", render: (r) => r.narrative ?? "—" },
   ];
+
 
   if (profileQ.isLoading) return <LoadingSkeleton rows={4} height="h-28" />;
   if (profileQ.isError) return <ErrorState onRetry={() => void profileQ.refetch()} />;
