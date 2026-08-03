@@ -420,7 +420,7 @@ function GoalsPage() {
                 </div>
               ) : null}
               <div className="mt-3">
-                <DataTable data={predictions} columns={historyColumns} />
+                <DataTable rows={predictions} columns={historyColumns} rowKey={(r) => r.id} />
               </div>
             </>
           )}
