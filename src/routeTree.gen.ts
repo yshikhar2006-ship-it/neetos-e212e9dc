@@ -13,6 +13,7 @@ import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedTodayRouteImport } from './routes/_authenticated/today'
 import { Route as AuthenticatedSyllabusRouteImport } from './routes/_authenticated/syllabus'
 import { Route as AuthenticatedStudyRoomsRouteImport } from './routes/_authenticated/study-rooms'
@@ -60,6 +61,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedTodayRoute = AuthenticatedTodayRouteImport.update({
@@ -242,6 +248,7 @@ export interface FileRoutesByFullPath {
   '/study-rooms': typeof AuthenticatedStudyRoomsRoute
   '/syllabus': typeof AuthenticatedSyllabusRoute
   '/today': typeof AuthenticatedTodayRoute
+  '/api/chat': typeof ApiChatRoute
   '/resources/doubts': typeof AuthenticatedResourcesDoubtsRoute
   '/resources/ncert': typeof AuthenticatedResourcesNcertRoute
   '/resources/notes': typeof AuthenticatedResourcesNotesRoute
@@ -273,6 +280,7 @@ export interface FileRoutesByTo {
   '/study-rooms': typeof AuthenticatedStudyRoomsRoute
   '/syllabus': typeof AuthenticatedSyllabusRoute
   '/today': typeof AuthenticatedTodayRoute
+  '/api/chat': typeof ApiChatRoute
   '/resources/doubts': typeof AuthenticatedResourcesDoubtsRoute
   '/resources/ncert': typeof AuthenticatedResourcesNcertRoute
   '/resources/notes': typeof AuthenticatedResourcesNotesRoute
@@ -309,6 +317,7 @@ export interface FileRoutesById {
   '/_authenticated/study-rooms': typeof AuthenticatedStudyRoomsRoute
   '/_authenticated/syllabus': typeof AuthenticatedSyllabusRoute
   '/_authenticated/today': typeof AuthenticatedTodayRoute
+  '/api/chat': typeof ApiChatRoute
   '/_authenticated/resources/doubts': typeof AuthenticatedResourcesDoubtsRoute
   '/_authenticated/resources/ncert': typeof AuthenticatedResourcesNcertRoute
   '/_authenticated/resources/notes': typeof AuthenticatedResourcesNotesRoute
@@ -345,6 +354,7 @@ export interface FileRouteTypes {
     | '/study-rooms'
     | '/syllabus'
     | '/today'
+    | '/api/chat'
     | '/resources/doubts'
     | '/resources/ncert'
     | '/resources/notes'
@@ -376,6 +386,7 @@ export interface FileRouteTypes {
     | '/study-rooms'
     | '/syllabus'
     | '/today'
+    | '/api/chat'
     | '/resources/doubts'
     | '/resources/ncert'
     | '/resources/notes'
@@ -411,6 +422,7 @@ export interface FileRouteTypes {
     | '/_authenticated/study-rooms'
     | '/_authenticated/syllabus'
     | '/_authenticated/today'
+    | '/api/chat'
     | '/_authenticated/resources/doubts'
     | '/_authenticated/resources/ncert'
     | '/_authenticated/resources/notes'
@@ -427,6 +439,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   OnboardingRoute: typeof OnboardingRoute
+  ApiChatRoute: typeof ApiChatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -457,6 +470,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/today': {
@@ -773,6 +793,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   OnboardingRoute: OnboardingRoute,
+  ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
