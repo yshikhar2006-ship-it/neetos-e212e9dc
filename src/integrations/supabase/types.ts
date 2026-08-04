@@ -568,6 +568,261 @@ export type Database = {
         }
         Relationships: []
       }
+      paper_answers: {
+        Row: {
+          capture_method: Database["public"]["Enums"]["paper_capture_method"]
+          created_at: string
+          id: string
+          marked_for_review: boolean
+          paper_id: string
+          paper_question_id: string
+          selected_option: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          capture_method?: Database["public"]["Enums"]["paper_capture_method"]
+          created_at?: string
+          id?: string
+          marked_for_review?: boolean
+          paper_id: string
+          paper_question_id: string
+          selected_option?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          capture_method?: Database["public"]["Enums"]["paper_capture_method"]
+          created_at?: string
+          id?: string
+          marked_for_review?: boolean
+          paper_id?: string
+          paper_question_id?: string
+          selected_option?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "paper_answers_paper_id_fkey"
+            columns: ["paper_id"]
+            isOneToOne: false
+            referencedRelation: "paper_uploads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "paper_answers_paper_question_id_fkey"
+            columns: ["paper_question_id"]
+            isOneToOne: false
+            referencedRelation: "paper_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      paper_pages: {
+        Row: {
+          created_at: string
+          extraction_cache: Json | null
+          extraction_status: string
+          id: string
+          page_number: number
+          paper_id: string
+          perceptual_hash: string | null
+          rotation: number
+          storage_path: string
+        }
+        Insert: {
+          created_at?: string
+          extraction_cache?: Json | null
+          extraction_status?: string
+          id?: string
+          page_number: number
+          paper_id: string
+          perceptual_hash?: string | null
+          rotation?: number
+          storage_path: string
+        }
+        Update: {
+          created_at?: string
+          extraction_cache?: Json | null
+          extraction_status?: string
+          id?: string
+          page_number?: number
+          paper_id?: string
+          perceptual_hash?: string | null
+          rotation?: number
+          storage_path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "paper_pages_paper_id_fkey"
+            columns: ["paper_id"]
+            isOneToOne: false
+            referencedRelation: "paper_uploads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      paper_questions: {
+        Row: {
+          confidence_score: number
+          correct_option: number | null
+          created_at: string
+          detected_subject_id: string | null
+          detected_topic_id: string | null
+          diagram_storage_path: string | null
+          difficulty: string
+          field_confidence: Json
+          id: string
+          marks: number | null
+          needs_review: boolean
+          options: Json
+          page_id: string | null
+          paper_id: string
+          position: number
+          question_text: string
+          updated_at: string
+        }
+        Insert: {
+          confidence_score?: number
+          correct_option?: number | null
+          created_at?: string
+          detected_subject_id?: string | null
+          detected_topic_id?: string | null
+          diagram_storage_path?: string | null
+          difficulty?: string
+          field_confidence?: Json
+          id?: string
+          marks?: number | null
+          needs_review?: boolean
+          options?: Json
+          page_id?: string | null
+          paper_id: string
+          position: number
+          question_text?: string
+          updated_at?: string
+        }
+        Update: {
+          confidence_score?: number
+          correct_option?: number | null
+          created_at?: string
+          detected_subject_id?: string | null
+          detected_topic_id?: string | null
+          diagram_storage_path?: string | null
+          difficulty?: string
+          field_confidence?: Json
+          id?: string
+          marks?: number | null
+          needs_review?: boolean
+          options?: Json
+          page_id?: string | null
+          paper_id?: string
+          position?: number
+          question_text?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "paper_questions_detected_subject_id_fkey"
+            columns: ["detected_subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "paper_questions_detected_topic_id_fkey"
+            columns: ["detected_topic_id"]
+            isOneToOne: false
+            referencedRelation: "topics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "paper_questions_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "paper_pages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "paper_questions_paper_id_fkey"
+            columns: ["paper_id"]
+            isOneToOne: false
+            referencedRelation: "paper_uploads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      paper_uploads: {
+        Row: {
+          coaching_institute: string | null
+          created_at: string
+          detected_language: string | null
+          folder: string | null
+          id: string
+          is_archived: boolean
+          is_favorite: boolean
+          marking_scheme: Json
+          page_count: number
+          processed_at: string | null
+          source_type: Database["public"]["Enums"]["paper_source_type"]
+          status: Database["public"]["Enums"]["paper_status"]
+          status_detail: string | null
+          subject_id: string | null
+          title: string
+          total_time_seconds: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          coaching_institute?: string | null
+          created_at?: string
+          detected_language?: string | null
+          folder?: string | null
+          id?: string
+          is_archived?: boolean
+          is_favorite?: boolean
+          marking_scheme?: Json
+          page_count?: number
+          processed_at?: string | null
+          source_type?: Database["public"]["Enums"]["paper_source_type"]
+          status?: Database["public"]["Enums"]["paper_status"]
+          status_detail?: string | null
+          subject_id?: string | null
+          title: string
+          total_time_seconds?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          coaching_institute?: string | null
+          created_at?: string
+          detected_language?: string | null
+          folder?: string | null
+          id?: string
+          is_archived?: boolean
+          is_favorite?: boolean
+          marking_scheme?: Json
+          page_count?: number
+          processed_at?: string | null
+          source_type?: Database["public"]["Enums"]["paper_source_type"]
+          status?: Database["public"]["Enums"]["paper_status"]
+          status_detail?: string | null
+          subject_id?: string | null
+          title?: string
+          total_time_seconds?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "paper_uploads_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       parent_links: {
         Row: {
           accepted_at: string | null
@@ -986,7 +1241,8 @@ export type Database = {
           id: string
           is_correct: boolean | null
           marked_for_review: boolean
-          question_id: string
+          paper_question_id: string | null
+          question_id: string | null
           selected_option: number | null
           time_spent_seconds: number
           user_id: string
@@ -997,7 +1253,8 @@ export type Database = {
           id?: string
           is_correct?: boolean | null
           marked_for_review?: boolean
-          question_id: string
+          paper_question_id?: string | null
+          question_id?: string | null
           selected_option?: number | null
           time_spent_seconds?: number
           user_id: string
@@ -1008,7 +1265,8 @@ export type Database = {
           id?: string
           is_correct?: boolean | null
           marked_for_review?: boolean
-          question_id?: string
+          paper_question_id?: string | null
+          question_id?: string | null
           selected_option?: number | null
           time_spent_seconds?: number
           user_id?: string
@@ -1019,6 +1277,13 @@ export type Database = {
             columns: ["attempt_id"]
             isOneToOne: false
             referencedRelation: "test_attempts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "test_answers_paper_question_id_fkey"
+            columns: ["paper_question_id"]
+            isOneToOne: false
+            referencedRelation: "paper_questions"
             referencedColumns: ["id"]
           },
           {
@@ -1038,6 +1303,7 @@ export type Database = {
           id: string
           incorrect_count: number
           max_score: number
+          paper_upload_id: string | null
           score: number
           started_at: string
           status: string
@@ -1056,6 +1322,7 @@ export type Database = {
           id?: string
           incorrect_count?: number
           max_score?: number
+          paper_upload_id?: string | null
           score?: number
           started_at?: string
           status?: string
@@ -1074,6 +1341,7 @@ export type Database = {
           id?: string
           incorrect_count?: number
           max_score?: number
+          paper_upload_id?: string | null
           score?: number
           started_at?: string
           status?: string
@@ -1086,6 +1354,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "test_attempts_paper_upload_id_fkey"
+            columns: ["paper_upload_id"]
+            isOneToOne: false
+            referencedRelation: "paper_uploads"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "test_attempts_test_id_fkey"
             columns: ["test_id"]
@@ -1417,6 +1692,19 @@ export type Database = {
         | "misread"
         | "guessed"
         | "unattempted"
+      paper_capture_method:
+        | "manual"
+        | "wrong_only"
+        | "omr_scan"
+        | "answer_sheet_scan"
+        | "answer_key_import"
+      paper_source_type: "pdf" | "images" | "camera"
+      paper_status:
+        | "queued"
+        | "processing"
+        | "needs_review"
+        | "ready"
+        | "failed"
       subscription_tier: "free" | "premium" | "premium_plus"
       test_type: "full_mock" | "chapter_wise" | "custom" | "pyq" | "diagnostic"
       topic_status:
@@ -1573,6 +1861,15 @@ export const Constants = {
         "guessed",
         "unattempted",
       ],
+      paper_capture_method: [
+        "manual",
+        "wrong_only",
+        "omr_scan",
+        "answer_sheet_scan",
+        "answer_key_import",
+      ],
+      paper_source_type: ["pdf", "images", "camera"],
+      paper_status: ["queued", "processing", "needs_review", "ready", "failed"],
       subscription_tier: ["free", "premium", "premium_plus"],
       test_type: ["full_mock", "chapter_wise", "custom", "pyq", "diagnostic"],
       topic_status: [
