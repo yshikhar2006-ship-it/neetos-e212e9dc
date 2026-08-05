@@ -249,7 +249,6 @@ export function useCreatePaper() {
       const paperId = paper.id as string;
       const pageRows: {
         paper_id: string;
-        user_id: string;
         page_number: number;
         storage_path: string;
         rotation: number;
@@ -267,11 +266,10 @@ export function useCreatePaper() {
 
         pageRows.push({
           paper_id: paperId,
-          user_id: user.id,
           page_number: i + 1,
           storage_path: path,
           rotation: page.edit?.rotation ?? 0,
-          perceptual_hash: page.perceptualHash ?? (await perceptualHash(page.file)) || null,
+          perceptual_hash: page.perceptualHash || (await perceptualHash(page.file)) || null,
         });
         setProgress({ done: i + 1, total: input.pages.length });
       }
@@ -357,7 +355,7 @@ export function useUpdatePaperQuestion(paperId: string | undefined) {
     }) => {
       const { error } = await supabase
         .from("paper_questions")
-        .update(patch as unknown as Record<string, unknown>)
+        .update(patch)
         .eq("id", id);
       if (error) throw error;
     },
@@ -526,7 +524,13 @@ export function usePaperMutations() {
   const qc = useQueryClient();
 
   const update = useMutation({
-    mutationFn: async ({ id, patch }: { id: string; patch: Record<string, unknown> }) => {
+    mutationFn: async ({
+      id,
+      patch,
+    }: {
+      id: string;
+      patch: Partial<Pick<PaperUpload, "title" | "folder" | "is_favorite" | "is_archived" | "coaching_institute">>;
+    }) => {
       const { error } = await supabase.from("paper_uploads").update(patch).eq("id", id);
       if (error) throw error;
     },
