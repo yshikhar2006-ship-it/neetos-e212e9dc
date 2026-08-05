@@ -43,6 +43,7 @@ import { Route as AuthenticatedRevisionFlashcardsRouteImport } from './routes/_a
 import { Route as AuthenticatedResourcesNotesRouteImport } from './routes/_authenticated/resources.notes'
 import { Route as AuthenticatedResourcesNcertRouteImport } from './routes/_authenticated/resources.ncert'
 import { Route as AuthenticatedResourcesDoubtsRouteImport } from './routes/_authenticated/resources.doubts'
+import { Route as AuthenticatedPapersPaperIdRouteImport } from './routes/_authenticated/papers.$paperId'
 import { Route as AuthenticatedPracticeResultsAttemptIdRouteImport } from './routes/_authenticated/practice.results.$attemptId'
 import { Route as AuthenticatedPracticeLiveAttemptIdRouteImport } from './routes/_authenticated/practice.live.$attemptId'
 
@@ -224,6 +225,12 @@ const AuthenticatedResourcesDoubtsRoute =
     path: '/doubts',
     getParentRoute: () => AuthenticatedResourcesRoute,
   } as any)
+const AuthenticatedPapersPaperIdRoute =
+  AuthenticatedPapersPaperIdRouteImport.update({
+    id: '/$paperId',
+    path: '/$paperId',
+    getParentRoute: () => AuthenticatedPapersRoute,
+  } as any)
 const AuthenticatedPracticeResultsAttemptIdRoute =
   AuthenticatedPracticeResultsAttemptIdRouteImport.update({
     id: '/results/$attemptId',
@@ -263,6 +270,7 @@ export interface FileRoutesByFullPath {
   '/syllabus': typeof AuthenticatedSyllabusRoute
   '/today': typeof AuthenticatedTodayRoute
   '/api/chat': typeof ApiChatRoute
+  '/papers/$paperId': typeof AuthenticatedPapersPaperIdRoute
   '/resources/doubts': typeof AuthenticatedResourcesDoubtsRoute
   '/resources/ncert': typeof AuthenticatedResourcesNcertRoute
   '/resources/notes': typeof AuthenticatedResourcesNotesRoute
@@ -296,6 +304,7 @@ export interface FileRoutesByTo {
   '/syllabus': typeof AuthenticatedSyllabusRoute
   '/today': typeof AuthenticatedTodayRoute
   '/api/chat': typeof ApiChatRoute
+  '/papers/$paperId': typeof AuthenticatedPapersPaperIdRoute
   '/resources/doubts': typeof AuthenticatedResourcesDoubtsRoute
   '/resources/ncert': typeof AuthenticatedResourcesNcertRoute
   '/resources/notes': typeof AuthenticatedResourcesNotesRoute
@@ -335,6 +344,7 @@ export interface FileRoutesById {
   '/_authenticated/syllabus': typeof AuthenticatedSyllabusRoute
   '/_authenticated/today': typeof AuthenticatedTodayRoute
   '/api/chat': typeof ApiChatRoute
+  '/_authenticated/papers/$paperId': typeof AuthenticatedPapersPaperIdRoute
   '/_authenticated/resources/doubts': typeof AuthenticatedResourcesDoubtsRoute
   '/_authenticated/resources/ncert': typeof AuthenticatedResourcesNcertRoute
   '/_authenticated/resources/notes': typeof AuthenticatedResourcesNotesRoute
@@ -374,6 +384,7 @@ export interface FileRouteTypes {
     | '/syllabus'
     | '/today'
     | '/api/chat'
+    | '/papers/$paperId'
     | '/resources/doubts'
     | '/resources/ncert'
     | '/resources/notes'
@@ -407,6 +418,7 @@ export interface FileRouteTypes {
     | '/syllabus'
     | '/today'
     | '/api/chat'
+    | '/papers/$paperId'
     | '/resources/doubts'
     | '/resources/ncert'
     | '/resources/notes'
@@ -445,6 +457,7 @@ export interface FileRouteTypes {
     | '/_authenticated/syllabus'
     | '/_authenticated/today'
     | '/api/chat'
+    | '/_authenticated/papers/$paperId'
     | '/_authenticated/resources/doubts'
     | '/_authenticated/resources/ncert'
     | '/_authenticated/resources/notes'
@@ -705,6 +718,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedResourcesDoubtsRouteImport
       parentRoute: typeof AuthenticatedResourcesRoute
     }
+    '/_authenticated/papers/$paperId': {
+      id: '/_authenticated/papers/$paperId'
+      path: '/$paperId'
+      fullPath: '/papers/$paperId'
+      preLoaderRoute: typeof AuthenticatedPapersPaperIdRouteImport
+      parentRoute: typeof AuthenticatedPapersRoute
+    }
     '/_authenticated/practice/results/$attemptId': {
       id: '/_authenticated/practice/results/$attemptId'
       path: '/results/$attemptId'
@@ -723,10 +743,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedPapersRouteChildren {
+  AuthenticatedPapersPaperIdRoute: typeof AuthenticatedPapersPaperIdRoute
   AuthenticatedPapersIndexRoute: typeof AuthenticatedPapersIndexRoute
 }
 
 const AuthenticatedPapersRouteChildren: AuthenticatedPapersRouteChildren = {
+  AuthenticatedPapersPaperIdRoute: AuthenticatedPapersPaperIdRoute,
   AuthenticatedPapersIndexRoute: AuthenticatedPapersIndexRoute,
 }
 
