@@ -38,6 +38,7 @@ import { Route as AuthenticatedAiCoachRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedRevisionIndexRouteImport } from './routes/_authenticated/revision.index'
 import { Route as AuthenticatedResourcesIndexRouteImport } from './routes/_authenticated/resources.index'
 import { Route as AuthenticatedPracticeIndexRouteImport } from './routes/_authenticated/practice.index'
+import { Route as AuthenticatedPapersIndexRouteImport } from './routes/_authenticated/papers.index'
 import { Route as AuthenticatedRevisionFlashcardsRouteImport } from './routes/_authenticated/revision.flashcards'
 import { Route as AuthenticatedResourcesNotesRouteImport } from './routes/_authenticated/resources.notes'
 import { Route as AuthenticatedResourcesNcertRouteImport } from './routes/_authenticated/resources.ncert'
@@ -193,6 +194,12 @@ const AuthenticatedPracticeIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedPracticeRoute,
   } as any)
+const AuthenticatedPapersIndexRoute =
+  AuthenticatedPapersIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedPapersRoute,
+  } as any)
 const AuthenticatedRevisionFlashcardsRoute =
   AuthenticatedRevisionFlashcardsRouteImport.update({
     id: '/flashcards',
@@ -245,7 +252,7 @@ export interface FileRoutesByFullPath {
   '/habits': typeof AuthenticatedHabitsRoute
   '/help': typeof AuthenticatedHelpRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
-  '/papers': typeof AuthenticatedPapersRoute
+  '/papers': typeof AuthenticatedPapersRouteWithChildren
   '/planner': typeof AuthenticatedPlannerRoute
   '/practice': typeof AuthenticatedPracticeRouteWithChildren
   '/profile': typeof AuthenticatedProfileRoute
@@ -260,6 +267,7 @@ export interface FileRoutesByFullPath {
   '/resources/ncert': typeof AuthenticatedResourcesNcertRoute
   '/resources/notes': typeof AuthenticatedResourcesNotesRoute
   '/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
+  '/papers/': typeof AuthenticatedPapersIndexRoute
   '/practice/': typeof AuthenticatedPracticeIndexRoute
   '/resources/': typeof AuthenticatedResourcesIndexRoute
   '/revision/': typeof AuthenticatedRevisionIndexRoute
@@ -281,7 +289,6 @@ export interface FileRoutesByTo {
   '/habits': typeof AuthenticatedHabitsRoute
   '/help': typeof AuthenticatedHelpRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
-  '/papers': typeof AuthenticatedPapersRoute
   '/planner': typeof AuthenticatedPlannerRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -293,6 +300,7 @@ export interface FileRoutesByTo {
   '/resources/ncert': typeof AuthenticatedResourcesNcertRoute
   '/resources/notes': typeof AuthenticatedResourcesNotesRoute
   '/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
+  '/papers': typeof AuthenticatedPapersIndexRoute
   '/practice': typeof AuthenticatedPracticeIndexRoute
   '/resources': typeof AuthenticatedResourcesIndexRoute
   '/revision': typeof AuthenticatedRevisionIndexRoute
@@ -316,7 +324,7 @@ export interface FileRoutesById {
   '/_authenticated/habits': typeof AuthenticatedHabitsRoute
   '/_authenticated/help': typeof AuthenticatedHelpRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
-  '/_authenticated/papers': typeof AuthenticatedPapersRoute
+  '/_authenticated/papers': typeof AuthenticatedPapersRouteWithChildren
   '/_authenticated/planner': typeof AuthenticatedPlannerRoute
   '/_authenticated/practice': typeof AuthenticatedPracticeRouteWithChildren
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
@@ -331,6 +339,7 @@ export interface FileRoutesById {
   '/_authenticated/resources/ncert': typeof AuthenticatedResourcesNcertRoute
   '/_authenticated/resources/notes': typeof AuthenticatedResourcesNotesRoute
   '/_authenticated/revision/flashcards': typeof AuthenticatedRevisionFlashcardsRoute
+  '/_authenticated/papers/': typeof AuthenticatedPapersIndexRoute
   '/_authenticated/practice/': typeof AuthenticatedPracticeIndexRoute
   '/_authenticated/resources/': typeof AuthenticatedResourcesIndexRoute
   '/_authenticated/revision/': typeof AuthenticatedRevisionIndexRoute
@@ -369,6 +378,7 @@ export interface FileRouteTypes {
     | '/resources/ncert'
     | '/resources/notes'
     | '/revision/flashcards'
+    | '/papers/'
     | '/practice/'
     | '/resources/'
     | '/revision/'
@@ -390,7 +400,6 @@ export interface FileRouteTypes {
     | '/habits'
     | '/help'
     | '/notifications'
-    | '/papers'
     | '/planner'
     | '/profile'
     | '/settings'
@@ -402,6 +411,7 @@ export interface FileRouteTypes {
     | '/resources/ncert'
     | '/resources/notes'
     | '/revision/flashcards'
+    | '/papers'
     | '/practice'
     | '/resources'
     | '/revision'
@@ -439,6 +449,7 @@ export interface FileRouteTypes {
     | '/_authenticated/resources/ncert'
     | '/_authenticated/resources/notes'
     | '/_authenticated/revision/flashcards'
+    | '/_authenticated/papers/'
     | '/_authenticated/practice/'
     | '/_authenticated/resources/'
     | '/_authenticated/revision/'
@@ -659,6 +670,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPracticeIndexRouteImport
       parentRoute: typeof AuthenticatedPracticeRoute
     }
+    '/_authenticated/papers/': {
+      id: '/_authenticated/papers/'
+      path: '/'
+      fullPath: '/papers/'
+      preLoaderRoute: typeof AuthenticatedPapersIndexRouteImport
+      parentRoute: typeof AuthenticatedPapersRoute
+    }
     '/_authenticated/revision/flashcards': {
       id: '/_authenticated/revision/flashcards'
       path: '/flashcards'
@@ -703,6 +721,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedPapersRouteChildren {
+  AuthenticatedPapersIndexRoute: typeof AuthenticatedPapersIndexRoute
+}
+
+const AuthenticatedPapersRouteChildren: AuthenticatedPapersRouteChildren = {
+  AuthenticatedPapersIndexRoute: AuthenticatedPapersIndexRoute,
+}
+
+const AuthenticatedPapersRouteWithChildren =
+  AuthenticatedPapersRoute._addFileChildren(AuthenticatedPapersRouteChildren)
 
 interface AuthenticatedPracticeRouteChildren {
   AuthenticatedPracticeIndexRoute: typeof AuthenticatedPracticeIndexRoute
@@ -770,7 +799,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHabitsRoute: typeof AuthenticatedHabitsRoute
   AuthenticatedHelpRoute: typeof AuthenticatedHelpRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
-  AuthenticatedPapersRoute: typeof AuthenticatedPapersRoute
+  AuthenticatedPapersRoute: typeof AuthenticatedPapersRouteWithChildren
   AuthenticatedPlannerRoute: typeof AuthenticatedPlannerRoute
   AuthenticatedPracticeRoute: typeof AuthenticatedPracticeRouteWithChildren
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
@@ -794,7 +823,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHabitsRoute: AuthenticatedHabitsRoute,
   AuthenticatedHelpRoute: AuthenticatedHelpRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
-  AuthenticatedPapersRoute: AuthenticatedPapersRoute,
+  AuthenticatedPapersRoute: AuthenticatedPapersRouteWithChildren,
   AuthenticatedPlannerRoute: AuthenticatedPlannerRoute,
   AuthenticatedPracticeRoute: AuthenticatedPracticeRouteWithChildren,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
